@@ -1,0 +1,14 @@
+  [http.routers]
+   # Define a connection between requests and services
+     [http.routers.prefect]
+        rule = "Host(`prefect.localhost`)"
+        entrypoints = ["websecure", "web"]
+        service = "prefect"
+     [http.routers.prefect.tls]
+        certResolver = "myresolver"
+
+ [http.services]
+        # Define how to reach an existing service on our infrastructure
+        [http.services.prefect.loadBalancer]
+           [[http.services.prefect.loadBalancer.servers]]
+             url = "http://0.0.0.0:4200"
