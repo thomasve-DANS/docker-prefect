@@ -3,7 +3,7 @@ version: '3.7'
 services:
   prefect:
     build:
-      context: .
+      context: prefect_docker/.
       dockerfile: Dockerfile
     container_name: 'prefect'
     command: sh start-prefect.sh
