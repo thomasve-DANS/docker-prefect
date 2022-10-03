@@ -7,6 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: 'prefect'
     command: sh start-prefect.sh
+    volumes:
+      - "./scripts:/scripts/"
     ports:
       # Local development only
       - "4200:4200"
