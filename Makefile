@@ -25,21 +25,22 @@ startprodbg: ## Start product in production mode, in background.
 stop: ## Stop the running project.
 	@docker-compose stop
 copy-poetry-files: ## Copies poetry files inside container
-	@docker cp ./backend/pyproject.toml ${PROJECT_CONTAINER_NAME}:/pyproject.toml
+	@docker cp ./prefect_docker/pyproject.toml ${PROJECT_CONTAINER_NAME}:/pyproject.toml
+	@docker cp ./prefect_docker/poetry.lock ${PROJECT_CONTAINER_NAME}:/poetry.lock
 	@docker exec -it ${PROJECT_CONTAINER_NAME} poetry update
-export-poetry-files: ## Exports poetry files from inside container
-	@docker cp ${PROJECT_CONTAINER_NAME}:/pyproject.toml ./backend/pyproject.toml
-	@docker cp ${PROJECT_CONTAINER_NAME}:/poetry.lock ./backend/poetry.lock
-update-requirements: copy-poetry-files
-	@docker exec -it ${PROJECT_CONTAINER_NAME} poetry update ${package_name}
-	make export-poetry-files ## Export requirements and lock file
+save-poetry-files: ## Exports poetry files from inside container
+	@docker cp ${PROJECT_CONTAINER_NAME}:/pyproject.toml ./prefect_docker/pyproject.toml.new
+	@docker cp ${PROJECT_CONTAINER_NAME}:/poetry.lock ./prefect_docker/poetry.lock.new
+update-requirements: 
+	make copy-poetry-files 
+	make save-poetry-files
 add-poetry-package: copy-poetry-files ## Adds a poetry package, using backend container to resolve. Expects: package_name arg. Ex: make add-poetry-package package_name="foo"
 	@docker exec -it ${PROJECT_CONTAINER_NAME} poetry add ${package_name}
-	make export-poetry-files
+	export-poetry-files
 remove-poetry-package: copy-poetry-files ## Removes a poetry package. Similar to adding.
 	@docker exec -it ${PROJECT_CONTAINER_NAME} poetry remove ${package_name}
-	make export-poetry-files
+	export-poetry-files
 shell-be: ## Enter system shell in backend container
-	@docker-compose exec backend-cts-amt sh
+	@docker-compose exec prefect bash
 python-shell-be: ## Enter into IPython shell in backend container
-	@docker-compose exec backend-cts-amt python -m IPython
+	@docker-compose exec prefect python -m IPython

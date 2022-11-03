@@ -9,6 +9,7 @@ services:
     command: sh start-prefect.sh
     volumes:
       - "./scripts:/scripts/"
+      - "/tmp:/tmp"
     ports:
       # Local development only
       - "4200:4200"
