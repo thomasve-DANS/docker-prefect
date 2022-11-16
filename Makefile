@@ -13,7 +13,8 @@ help: ## Show this help.
 	# From https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 build: ## Build and start project.
-	@docker-compose up --build
+	@docker-compose up --build --detach
+	make submodules
 buildprod: ## Build and start project using production docker-compose
 	@docker-compose -f docker-compose-prod.yml up --build
 start: ## Start project running in a non-detached mode.
@@ -44,3 +45,8 @@ shell-be: ## Enter system shell in backend container
 	@docker-compose exec prefect bash
 python-shell-be: ## Enter into IPython shell in backend container
 	@docker-compose exec prefect python -m IPython
+submodules:
+	git submodule init
+	git submodule foreach git checkout main	
+run:
+	@docker exec -it ${PROJECT_CONTAINER_NAME} python /scripts/${workflow_name} 
