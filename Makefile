@@ -30,8 +30,8 @@ copy-poetry-files: ## Copies poetry files inside container
 	@docker cp ./prefect_docker/poetry.lock ${PROJECT_CONTAINER_NAME}:/app/poetry.lock
 	@docker exec -it ${PROJECT_CONTAINER_NAME} poetry update
 save-poetry-files: ## Exports poetry files from inside container
-	@docker cp ${PROJECT_CONTAINER_NAME}:/pyproject.toml ./prefect_docker/pyproject.toml.new
-	@docker cp ${PROJECT_CONTAINER_NAME}:/poetry.lock ./prefect_docker/poetry.lock.new
+	@docker cp ${PROJECT_CONTAINER_NAME}:/app/pyproject.toml ./prefect_docker/pyproject.toml.new
+	@docker cp ${PROJECT_CONTAINER_NAME}:/app/poetry.lock ./prefect_docker/poetry.lock.new
 update-requirements: 
 	make copy-poetry-files 
 	make save-poetry-files
