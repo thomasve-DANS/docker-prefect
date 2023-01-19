@@ -26,8 +26,8 @@ startprodbg: ## Start product in production mode, in background.
 stop: ## Stop the running project.
 	@docker-compose stop
 copy-poetry-files: ## Copies poetry files inside container
-	@docker cp ./prefect_docker/pyproject.toml ${PROJECT_CONTAINER_NAME}:/pyproject.toml
-	@docker cp ./prefect_docker/poetry.lock ${PROJECT_CONTAINER_NAME}:/poetry.lock
+	@docker cp ./prefect_docker/pyproject.toml ${PROJECT_CONTAINER_NAME}:/app/pyproject.toml
+	@docker cp ./prefect_docker/poetry.lock ${PROJECT_CONTAINER_NAME}:/app/poetry.lock
 	@docker exec -it ${PROJECT_CONTAINER_NAME} poetry update
 save-poetry-files: ## Exports poetry files from inside container
 	@docker cp ${PROJECT_CONTAINER_NAME}:/pyproject.toml ./prefect_docker/pyproject.toml.new
