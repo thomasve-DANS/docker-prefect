@@ -3,6 +3,7 @@ include .env
 
 PROJECT_NAME = prefect_docker
 PROJECT_SRV = ${PROJECT_NAME}
+AGENT_NAME = 'test'
 
 .PHONY = help
 .DEFAULT:
@@ -14,7 +15,6 @@ help: ## Show this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 build: ## Build and start project.
 	@docker-compose up --build --detach
-	make submodules
 buildprod: ## Build and start project using production docker-compose
 	@docker-compose -f docker-compose-prod.yml up --build
 start: ## Start project running in a non-detached mode.
@@ -49,4 +49,13 @@ submodules:
 	git submodule init
 	git submodule foreach git checkout main	
 run:
-	@docker exec -it ${PROJECT_CONTAINER_NAME} python /scripts/${workflow_name} 
+	@docker exec -it ${PROJECT_CONTAINER_NAME} python /scripts/${workflow_name}
+deploy:
+	@docker exec -w /scripts/ -it ${PROJECT_CONTAINER_NAME} prefect deployment build odissei/flows/cbs_ingestion.py:cbs_metadata_ingestion -n cbs -q test
+	@docker exec -w /scripts/ -it ${PROJECT_CONTAINER_NAME} prefect deployment apply cbs_metadata_ingestion-deployment.yaml
+	@docker exec -w /scripts/ -it ${PROJECT_CONTAINER_NAME} prefect deployment build odissei/flows/easy_ingestion.py:easy_metadata_ingestion -n easy -q test
+	@docker exec -w /scripts/ -it ${PROJECT_CONTAINER_NAME} prefect deployment apply easy_metadata_ingestion-deployment.yaml
+	@docker exec -w /scripts/ -it ${PROJECT_CONTAINER_NAME} prefect deployment build odissei/flows/liss_ingestion.py:liss_metadata_ingestion -n liss -q test
+	@docker exec -w /scripts/ -it ${PROJECT_CONTAINER_NAME} prefect deployment apply liss_metadata_ingestion-deployment.yaml
+	@docker exec -w /scripts/ -it ${PROJECT_CONTAINER_NAME} prefect deployment build ariadne/flows/oaiore_to_x3ml_flows.py:ariadne_flow -n ariadne -q test
+	@docker exec -w /scripts/ -it ${PROJECT_CONTAINER_NAME} prefect deployment apply ariadne_flow-deployment.yaml

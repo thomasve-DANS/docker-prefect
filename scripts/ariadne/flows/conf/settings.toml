@@ -1,0 +1,40 @@
+[default]
+dataverse_url = "https://dataverse.nl"
+dv_name = "dccd"
+transformer_url = "https://transformer.labs.dans.knaw.nl/transform/json_to_xml_no_default_ns.xsl"
+oai_ore_source_dir = "/Users/akmi/git/ARIADNE/dccd_oai_ore-to-x3ml/resources/oai-ore-samples"
+#json_source_dir = "/Users/akmi/Downloads/dccd_dataset_metadata_oaiore_json_20221010"
+output_dir = "/Users/akmi/git/ARIADNE/dccd_oai_ore-to-x3ml/output"
+transformed_output_dir = "/Users/akmi/git/ARIADNE/dccd_oai_ore-to-x3ml/output3"
+temp_transform_file = "/tmp/transform"
+#logs
+log_file = "../logs/oaiore3ml.log"
+log_level = 10
+log_format = "%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s"
+#Note: below the list of logging level
+#CRITICAL = 50
+#ERROR = 40
+#WARNING = 30
+#INFO = 20
+#DEBUG = 10
+#xsl location
+
+dans_minio_endpoint = "minioapi2.labs.dans.knaw.nl"
+dans_minio_bucket = "storage01"
+
+
+
+##MAIL
+mail_url= "https://api.mailgun.net/v3/sandbox6fb644814ced45eb867166618d307b6b.mailgun.org"
+mail_to= "Eko Indarto<e.indarto@gmail.com>"
+mail_from= "Eko Indarto DANS<eko.indarto@dans.knaw.nl>"
+mail_object= "AriadnePlus Testing"
+
+
+[development]
+
+[staging]
+
+[testing]
+
+[production]

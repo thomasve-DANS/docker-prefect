@@ -1,0 +1,44 @@
+###
+### A complete description of a Prefect Deployment for flow 'cbs-metadata-ingestion'
+###
+name: cbs
+description: null
+version: b9657edf809d0df23a638401eefb300f
+# The work queue that will handle this deployment's runs
+work_queue_name: test
+work_pool_name: null
+work_pool_queue_name: null
+tags: []
+parameters: {}
+schedule: null
+infra_overrides: {}
+infrastructure:
+  type: process
+  env: {}
+  labels: {}
+  name: null
+  command: null
+  stream_output: true
+  working_dir: null
+  block_type_slug: process
+  _block_type_slug: process
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: cbs-metadata-ingestion
+manifest_path: null
+storage: null
+path: /scripts/odissei
+entrypoint: flows/cbs_ingestion.py:cbs_metadata_ingestion
+parameter_openapi_schema:
+  title: Parameters
+  type: object
+  properties:
+    file_path:
+      title: file_path
+      position: 0
+  required:
+  - file_path
+  definitions: null
+timestamp: '2023-01-17T10:17:38.370722+00:00'
